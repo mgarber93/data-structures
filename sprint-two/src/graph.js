@@ -7,7 +7,10 @@ var Graph = function() {
 
 // Add a node to the graph, passing in the node's value.
 Graph.prototype.addNode = function(value) {
-  this.nodes.push({'value': value, 'edges': []});
+  this.nodes.push({
+    'value': value, // value primitive 
+    'edges': [] // array of node objects
+  });
 };
 
 // Return a boolean value indicating if the value passed to contains is represented in the graph.
@@ -22,7 +25,8 @@ Graph.prototype.contains = function(value) {
 
 // Removes a node from the graph.
 Graph.prototype.removeNode = function(value) {
-  this.nodes = this.nodes.filter( node => node.value !== value);
+  this.nodes = this.nodes.filter( node => node.value !== value );
+  this.nodes.forEach( o => this.removeEdge(o.value, value) );
 };
 
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
@@ -39,11 +43,13 @@ Graph.prototype.addEdge = function(fromValue, toValue) {
   if (nodesMatchTo.length * nodesMatchFrom.length === 0) { return undefined; }
   nodesMatchFrom[0].edges.push(nodesMatchTo[0]);
   nodesMatchTo[0].edges.push(nodesMatchFrom[0]);
-  console.log(true);
 };
 
 // Remove an edge between any two specified (by value) nodes.
 Graph.prototype.removeEdge = function(fromValue, toValue) {
+  this.nodes.filter(obj => obj.value === fromValue || obj.value === toValue)
+    .forEach(o => o.edges = o.edges
+    .filter(i => !i.value === fromValue && !i.value === toValue));
 };
 
 // Pass in a callback which will be executed on each node of the graph.
