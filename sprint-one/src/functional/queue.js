@@ -5,7 +5,6 @@ var Queue = function() {
   var storage = {};
   storage['size'] = 0;
   storage['key'] = 0;
-  
 
   // Implement the methods below
 
