@@ -11,18 +11,18 @@ Graph.prototype.addNode = function(node) {
   if (this.home === null) { 
     this.home = node; 
   } else {
-    this.neighbors.push(new Graph().addNode(node));
+    let newGraph = new Graph();
+    newGraph.addNode(node);
+    this.neighbors.push(newGraph);
   }
+  console.log(this.home);
 };
 
 // Return a boolean value indicating if the value passed to contains is represented in the graph.
 Graph.prototype.contains = function(node) {
-  if (this.home.value === node.value) {
-    return true;
-  }
-  for (let neighbor of this.neighbors) {
-    if (neighbors.contains(node)) { return true; }
-  }
+  this.forEachNode(graph => {
+    if (graph.home === node) { return true; } 
+  });
   return false;
 };
 
@@ -33,7 +33,7 @@ Graph.prototype.removeNode = function(node) {
 
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
 Graph.prototype.hasEdge = function(fromNode, toNode) {
-  return fromNode.neighbors.contains(toNode.home) && toNode.neighbors.contains(fromNode.home);
+  //return fromNode.neighbors.contains(toNode.home) && toNode.neighbors.contains(fromNode.home);
 };
 
 // Connects two nodes in a graph by adding an edge between them.
@@ -45,7 +45,13 @@ Graph.prototype.removeEdge = function(fromNode, toNode) {
 };
 
 // Pass in a callback which will be executed on each node of the graph.
-Graph.prototype.forEachNode = function(cb) {
+Graph.prototype.forEachNode = function(cb, history = []) {
+  cb(this.home);
+  history.push(this);
+  let newNeighbors = this.neighbors.filter( e => !history.includes(e)); // array of graphs
+  for (let neighbor of newNeighbors) {
+    if (neighbor !== undefined ) { neighbor.forEachNode(cb, history); }
+  }
 };
 
 /*
