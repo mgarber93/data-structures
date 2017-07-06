@@ -7,7 +7,7 @@ var Stack = function() {
 
 Stack.prototype.pop = function() {
   if (this.storage.size <= 0) { return undefined; }
-  return this.storage[this.storage.size-- - 1];
+  return this.storage[--this.storage.size];
 };
 
 
