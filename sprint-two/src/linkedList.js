@@ -5,8 +5,9 @@ var LinkedList = function() {
 
   list.addToTail = function(value) {
     var newNode = Node(value);
-    list.head === null ? list.head = newNode : list.tail.next = newNode;
-    list.tail = newNode;  
+    this.head === null ? this.head = newNode : 
+      this.tail.next = newNode;
+    this.tail = newNode;  
   };
 
   list.removeHead = function() {
@@ -41,7 +42,7 @@ var Node = function(value) {
 
 /*
  * Complexity: What is the time complexity of the above functions?
-addToTail = constant
-removeHead = constant
-contains = linear
+ * addToTail = constant
+ * removeHead = constant
+ * contains = linear
  */
