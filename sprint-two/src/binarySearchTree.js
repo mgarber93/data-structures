@@ -1,54 +1,53 @@
-var BinarySearchTree = function(value) {
-  const bst = Object.create(BinarySearchTree.prototype);
-  bst.value = value;
-  bst.count = 1;
-  bst.left = null;
-  bst.right = null;
-  return bst;
-};
+class BinarySearchTree {
+  constructor(value) {
+    this.value = value;
+    this.count = 1;
+    this.left = null;
+    this.right = null;
+  }
 
-Object.prototype.insert = function (value) {
-  if (this.value < value) {
-    if (this.right !== null) {
-      this.right.insert(value);
+  insert(value) {
+    if (this.value < value) {
+      if (this.right !== null) {
+        this.right.insert(value);
+      } else {
+        this.right = new BinarySearchTree(value);
+      }
+    } else if (this.value > value) {
+      if (this.left !== null) {
+        this.left.insert(value);
+      } else {
+        this.left = new BinarySearchTree(value);
+      }
     } else {
-      this.right = BinarySearchTree(value);
+      this.count++;
     }
-  } else if (this.value > value) {
+  }
+
+  contains(value) {
+    if (this.value === value) {
+      return true;
+    }
     if (this.left !== null) {
-      this.left.insert(value);
-    } else {
-      this.left = BinarySearchTree(value);
+      if (this.left.contains(value)) { return true; }
     }
-  } else {
-    this.count++;
+    if (this.right !== null) {
+      if (this.right.contains(value)) { return true; }
+    }
+    return false;
   }
-};
+  
+  depthFirstLog(cb) {
+    cb(this.value);
+    if (this.left !== null) {
+      this.left.depthFirstLog(cb);
+    }
+    if (this.right !== null) {
+      this.right.depthFirstLog(cb);
+    }
+  }
 
-Object.prototype.contains = function (value) {
-  if (this.value === value) {
-    return true;
-  }
-  if (this.left !== null) {
-    if (this.left.contains(value)) { return true; }
-  }
-  if (this.right !== null) {
-    if (this.right.contains(value)) { return true; }
-  }
-  return false;
-};
-
-
-Object.prototype.depthFirstLog = function (cb) {
-  cb(this.value);
-  if (this.left !== null) {
-    this.left.depthFirstLog(cb);
-  }
-  if (this.right !== null) {
-    this.right.depthFirstLog(cb);
-  }
-};
-
+}
 
 /*
  * Complexity: What is the time complexity of the above functions?
