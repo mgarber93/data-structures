@@ -9,7 +9,12 @@ class Set {
     }
   }
 
+  insert(item) {
+    this.storage[JSON.stringify(item)] = item;
+  }
+
   contains(item) {
+    // linear
     return this.storage.hasOwnProperty(JSON.stringify(item));
   }
 
