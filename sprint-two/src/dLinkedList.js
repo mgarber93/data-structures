@@ -5,17 +5,25 @@ var DLinkedList = function() {
 
   list.addToTail = function(value) {
     var newNode = Node(value);
+    newNode.prev = this.tail;
     this.head === null ? this.head = newNode : 
       this.tail.next = newNode;
     this.tail = newNode;  
   };
 
   list.addToHead = function(value) {
-
+    var newNode = Node(value);
+    newNode.next = this.head;
+    if (this.head !== null) { this.head.prev = newNode; }
+    this.head = newNode;
   };
   
   list.removeTail = function() {
-
+    if (list.tail === null) { return null; }    
+    var returnMe = this.tail.value;
+    this.tail = this.tail.prev;
+    this.tail.prev = null;
+    return returnMe;
   };
 
   list.removeHead = function() {
