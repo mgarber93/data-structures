@@ -7,6 +7,9 @@ class BloomFilter extends Set {
 
   test(member) {
     var string = `some string${member}`;
+    ()=>{
+    
+    }
   }
 
   static 
