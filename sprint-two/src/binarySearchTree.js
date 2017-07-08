@@ -8,17 +8,11 @@ class BinarySearchTree {
 
   insert(value) {
     if (this.value < value) {
-      if (this.right !== null) {
-        this.right.insert(value);
-      } else {
+      this.right !== null ? this.right.insert(value) : 
         this.right = new BinarySearchTree(value);
-      }
     } else if (this.value > value) {
-      if (this.left !== null) {
-        this.left.insert(value);
-      } else {
+      this.left !== null ? this.left.insert(value) : 
         this.left = new BinarySearchTree(value);
-      }
     } else {
       this.count++;
     }
