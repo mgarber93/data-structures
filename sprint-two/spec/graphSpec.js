@@ -68,4 +68,21 @@ describe('graph', function() {
     expect(graph.hasEdge(3, 5)).to.equal(true);
     expect(graph.hasEdge(5, 5)).to.equal(true);
   });
+
+  it('should not remove nodes that were not inserted', function() {
+    expect(() => graph.removeNode(2)).to.not.throw();
+  });
+
+  it('should get edges from a set of nodes', function () {
+    graph.addNode(6);
+    graph.addNode(4);
+    graph.addNode(1);
+    graph.addNode(3);
+    graph.addNode(5);
+    graph.addEdge(5, 1);
+    graph.addEdge(5, 4);
+    expect(graph.getEdges(5).length).to.equal(2);
+  });
+  
+  
 });

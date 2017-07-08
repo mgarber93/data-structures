@@ -31,7 +31,7 @@ describe('hashTable', function() {
 
   it('should not contain values that were removed', function() {
     hashTable.insert('Steven', 'Tyler');
-    hashTable.remove('Steven');
+    hashTable.remove('Steven', 'Tyler');
     expect(hashTable.retrieve('Steven')).to.equal(undefined);
   });
 
@@ -66,11 +66,12 @@ describe('hashTable', function() {
       expect(hashTable.retrieve(firstName)).to.equal(lastName);
     });
     expect(hashTable._limit).to.equal(16);
-    hashTable.remove('George');
-    hashTable.remove('Dr.');
-    hashTable.remove('Steven');
-    hashTable.remove('John');
-    hashTable.remove('Mr.');
+    // fix for side chained approach k, v
+    hashTable.remove('George', 'Harrison');
+    hashTable.remove('Dr.', 'Sunshine');
+    hashTable.remove('Steven', 'Tyler');
+    hashTable.remove('John', 'Resig');
+    hashTable.remove('Mr.', 'Doob');
     expect(hashTable._limit).to.equal(8);
   });
 });
