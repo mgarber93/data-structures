@@ -1,4 +1,4 @@
-/*
+/* 
  ********** NOTE: **********
  * Do not edit this code unless you see a bug!
  */
@@ -42,7 +42,6 @@ var LimitedArray = function(limit) {
     // write this
     // size--;
     // go to the storage index and call delete pa
-    debugger;
     storage[index].remove(key, val);
   };
 
