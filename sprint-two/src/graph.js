@@ -57,8 +57,20 @@ Graph.prototype.forEachNode = function(cb) {
   this.nodes.map(obj => obj.value).forEach(cb);
 };
 
+Graph.prototype.getEdges = function(value) {
+  return this.nodes.filter(o => o.value === value)
+    .map(o => o.edges)
+    .reduce( (a, b) => a.concat(b), []);
+};
+
 /*
  * Complexity: What is the time complexity of the above functions?
+ * removeEdge: linear
+ * addEdge: linear
+ * hasEdge: linear
+ * removeNode: Quadratic 
+ * contains: linear
+ * addNode: constant
  */
 
 
