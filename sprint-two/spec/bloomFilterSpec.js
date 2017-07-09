@@ -29,20 +29,20 @@ describe('BloomFilter', function() {
 
   it('should test if a member exists', () => {
     bloomFilter = new BloomFilter(50, 4);
-    bloomFilter.add(3);
+    bloomFilter.add(121);
     bloomFilter.add('matt');
-    expect(bloomFilter.test(3)).to.equal(true);
+    expect(bloomFilter.test(121)).to.equal(true);
     expect(bloomFilter.test('matt')).to.equal(true);
     expect(bloomFilter.test('nate')).to.equal(false);
     expect(bloomFilter.test('example')).to.equal(false);
     console.log(bloomFilter.show());
+
   });
 
   it('more testing', () => {
     bloomFilter = new BloomFilter(50, 4);
     bloomFilter.add('nate');
     expect(bloomFilter.test('matt')).to.equal(false);
-    console.log(bloomFilter.show());
   });
 
   
