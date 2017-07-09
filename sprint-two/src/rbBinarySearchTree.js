@@ -4,40 +4,47 @@ class RbBinarySearchTree {
   }
 
   addChild(value) {
+    // debugger;
     if (this.root === null) {
       this.root = new RBNode(value, false);
     } else {
-      //debugger;
       let path = this.root.insert(value);
-      if (path.length > 2 ) {
-        path.pop();
+      if (path.length > 1 ) {
+        let alpha = path.pop();
         path.push(!path.pop());  //path to uncle
-        // recoloring
-        // rebalancing
-        if (updateNode(path, n => n.isRed)) {
-          updateNode(path, n => n.isRed = false);
+        if (this.updateNode(path, n => n.isRed)) {
+          this.updateNode(path, n => n.isRed = false);
           path.push(!path.pop());
-          updateNode(path, n => n.isRed = false);
-          updateNode(path.pop(), n => n.isRed = true);
+          this.updateNode(path, n => n.isRed = false);
+          path.pop()
+          this.updateNode(path, n => n.isRed = true);
         } else {
           let pathToParent = path.slice();
           let beta = pathToParent.pop(); // done
 
           let pathToGP = pathToParent.slice();
           pathToGP.pop();
-
-          let parent = updateNode(pathToParent, n => n);
-          parent[beta ? 'left' : 'right'] = updateNode(
-            pathToGP,
-            n => n);
-          let alpha = pathToGP.pop(); //now is ggp
-          let ggp = updateNode(pathToGP, n => n);
-          ggp[alpha ? 'right' : 'false'] = parent;
+          let parent;
+          if (pathToGP.length <= 0) {
+            parent = this.root[beta ? 'left' : 'right'];
+            let gp = this.root;
+            gp[beta?'left':'right'] = null;
+            gp.isRed = true;
+            this.root = parent;
+            parent[!alpha ? 'right' : 'left'] = gp;
+          } else {
+            parent = this.updateNode(pathToParent, n => n);
+            parent[beta ? 'left' : 'right'] = this.updateNode(
+              pathToGP,
+              n => n);
+            let gamma = pathToGP.pop(); //now is ggp
+            let ggp = this.updateNode(pathToGP, n => n);
+            ggp[gamma ? 'right' : 'false'] = parent;
+          }
 
         }
         this.root.isRed = false;
       }
-
     }
   }
 
@@ -75,27 +82,19 @@ class RbBinarySearchTree {
         next.push(n.right);
       }
     });
-    show(nodes);
+    this.show(nodes);
   }
 
   contains(value) {
     if (this.root === null) { return false; }
-    return this.root.contains(value);
+    return RBNode.has(this.root, value);
   }
-
 
   depthFirstLog(cb) {
    if(this.root !== null) {
     this.root.depthFirstLog(cb);
    }
   }
-  // rotateCheck() {
-
-  // }
-
-  // rotate() {
-
-
 }
 
 class RBNode {
@@ -112,14 +111,14 @@ class RBNode {
         return [true].concat(this.right.insert(value));
       } else {
         this.right = new RBNode(value);
-        return [];
+        return [true];
       }
     } else if (this.value > value) {
       if (this.left !== null) {
         return [false].concat(this.left.insert(value));
       } else {
         this.left = new RBNode(value);
-        return [];
+        return [false];
       }
     } else {
       // debugger;
@@ -137,22 +136,26 @@ class RBNode {
     }
   }
 
-  contains(value) {
-    // needs to be called from bst
-    if (this.value === value) {
-      return true;
-    }
-    if (this.left !== null) {
-      if (this.right.contains(value)) { return true; }
-    }
-    if (this.right !== null) {
-      if (this.right.contains(value)) { return true; }
-    }
-    return false;
-  }
 
   getColor() {
     return this.isRed ? 'red' : 'black';
   }
 
+  static has(obj, value) {
+    if (obj === null) {
+      return false;
+    }
+    if (obj.value === value) {
+      return true;
+    }
+    if (obj.left !== null) {
+      if(RBNode.has(obj.left, value)) { return true; }
+    }
+    if (obj.right !== null) {
+      if (RBNode.has(obj.right, value)) { return true; }
+    }
+    return false;
+  }
+
 }
+

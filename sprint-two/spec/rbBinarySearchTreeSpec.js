@@ -32,16 +32,35 @@ describe('Red-Black BinarySearchTree', function() {
     rbBinarySearchTree.addChild(3);
     expect(rbBinarySearchTree.root.value).to.equal(5);
     expect(rbBinarySearchTree.root.left.value).to.equal(4);
+    expect(rbBinarySearchTree.root.left.right).to.equal(null);
     expect(rbBinarySearchTree.root.left.left.value).to.equal(3);
+    expect(rbBinarySearchTree.root.left.left.left).to.equal(null);
+    expect(rbBinarySearchTree.root.left.left.right).to.equal(null);
     expect(rbBinarySearchTree.root.right.value).to.equal(6);
+    expect(rbBinarySearchTree.root.right.right).to.equal(null);
+    expect(rbBinarySearchTree.root.right.left).to.equal(null);
     expect(rbBinarySearchTree.root.right.getColor()).to.equal('black');
     expect(rbBinarySearchTree.root.left.getColor()).to.equal('black');
+  });
 
+
+  it('should insert values at the correct location in the tree using rotations', function() {
+    rbBinarySearchTree.addChild(2);
+    rbBinarySearchTree.addChild(3);
+    rbBinarySearchTree.addChild(7);
+    expect(rbBinarySearchTree.root.value).to.equal(3);
+    expect(rbBinarySearchTree.root.left.value).to.equal(2);
+    expect(rbBinarySearchTree.root.left.right).to.equal(null);
+    expect(rbBinarySearchTree.root.right.value).to.equal(7);
+    expect(rbBinarySearchTree.root.right.right).to.equal(null);
+    expect(rbBinarySearchTree.root.right.left).to.equal(null);
+    expect(rbBinarySearchTree.root.right.getColor()).to.equal('red');
+    expect(rbBinarySearchTree.root.left.getColor()).to.equal('red');
   });
 
   it('should have a working "contains" method', function() {
-    rbBinarySearchTree.addChild(2);
     rbBinarySearchTree.addChild(3);
+    rbBinarySearchTree.addChild(2);
     rbBinarySearchTree.addChild(7);
     expect(rbBinarySearchTree.contains(7)).to.equal(true);
     expect(rbBinarySearchTree.contains(8)).to.equal(false);
@@ -54,6 +73,6 @@ describe('Red-Black BinarySearchTree', function() {
     rbBinarySearchTree.addChild(2);
     rbBinarySearchTree.addChild(3);
     rbBinarySearchTree.depthFirstLog(func);
-    expect(array).to.eql([5, 2, 3]);
+    expect(array).to.eql([2, 5, 3]);
   });
 });
