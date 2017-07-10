@@ -1,45 +1,89 @@
+/**
+ * RB-BST object tracks the root of the tree, which is an instance of
+ * RBNode. RBNode's keep a value, a color, and reference to their left
+ * and right children. Given a node an alpha, beta, and gamma connection
+ * refers to the previous left right choices in order of most recent to
+ * least, respectively.
+ *
+ * TODO:
+ *   1) make recoloring percolate upward
+ *   2) better visualization besides show
+ *   3) delete node method
+ *
+ */
 class RbBinarySearchTree {
   constructor() {
     this.root = null;
   }
 
   addChild(value) {
-    // debugger;
     if (this.root === null) {
       this.root = new RBNode(value, false);
     } else {
       let path = this.root.insert(value);
       if (path.length > 1 ) {
         let alpha = path.pop();
-        path.push(!path.pop());  //path to uncle
+        path.push(!path.pop()); //path to uncle
         if (this.updateNode(path, n => n.isRed)) {
           this.updateNode(path, n => n.isRed = false);
           path.push(!path.pop());
           this.updateNode(path, n => n.isRed = false);
-          path.pop()
+          path.pop();
           this.updateNode(path, n => n.isRed = true);
         } else {
           let pathToParent = path.slice();
-          let beta = pathToParent.pop(); // done
-
+          let beta = !pathToParent.pop(); // done
           let pathToGP = pathToParent.slice();
           pathToGP.pop();
           let parent;
           if (pathToGP.length <= 0) {
-            parent = this.root[beta ? 'left' : 'right'];
-            let gp = this.root;
-            gp[beta?'left':'right'] = null;
-            gp.isRed = true;
-            this.root = parent;
-            parent[!alpha ? 'right' : 'left'] = gp;
+            // gp is root
+            if (alpha === beta) {
+              parent = this.root[beta ? 'right' : 'left'];
+              let gp = this.root;
+              gp[beta ? 'right' : 'left'] = null;
+              gp.isRed = true;
+              this.root = parent;
+              parent[!alpha ? 'right' : 'left'] = gp;
+            } else {
+              parent = this.root[beta ? 'right' : 'left'];
+              let child = parent[alpha ? 'right' : 'left'];
+              let gp = this.root;
+              this.root = child;
+              child[alpha ? 'left' : 'right'] = parent;
+              parent[alpha ? 'right' : 'left'] = null;
+              child[alpha ? 'right' : 'left'] = gp;
+              gp[beta ? 'right' : 'left'] = null;
+              child.isRed = false;
+              parent.isRed = true;
+              gp.isRed = true;
+            }
           } else {
-            parent = this.updateNode(pathToParent, n => n);
-            parent[beta ? 'left' : 'right'] = this.updateNode(
-              pathToGP,
-              n => n);
-            let gamma = pathToGP.pop(); //now is ggp
-            let ggp = this.updateNode(pathToGP, n => n);
-            ggp[gamma ? 'right' : 'false'] = parent;
+            // ggp gamma connection must be saved
+            let gamma = pathToGP.pop();
+            let ggp = this.updateNode(path, n => n);
+            parent = ggp[beta ? 'right' : 'left'];
+            if (alpha === beta) {
+              let gp = ggp[gamma ? 'right' : 'false'];
+              gp[beta ? 'right' : 'left'] = null;
+              ggp[gamma ? 'right' : 'left'] = parent;
+              parent[!alpha ? 'right' : 'left'] = gp;
+              // everything gp down inclusive flips color
+              gp.isRed = !gp.isRed;
+              parent.isRed = !parent.isRed;
+              parent[alpha ? 'right' : 'left'].isRed = !parent[alpha ? 'right' : 'left'].isRed;
+            } else {
+              let child = parent[alpha ? 'right' : 'left'];
+              let gp = ggp[gamma ? 'right' : 'left'];
+              ggp[gamma ? 'right' : 'left'] = child;
+              child[alpha ? 'left' : 'right'] = parent;
+              parent[alpha ? 'right' : 'left'] = null;
+              child[alpha ? 'right' : 'left'] = gp;
+              gp[beta ? 'right' : 'left'] = null;
+              child.isRed = false;
+              parent.isRed = true;
+              gp.isRed = true;
+            }
           }
 
         }
@@ -91,10 +135,17 @@ class RbBinarySearchTree {
   }
 
   depthFirstLog(cb) {
-   if(this.root !== null) {
-    this.root.depthFirstLog(cb);
-   }
+    if (this.root !== null) {
+      this.root.depthFirstLog(cb);
+    }
   }
+
+  forEachBelow(cb) {
+    if (this.root !== null) {
+      this.root.forEachBelow(cb);
+    }
+  }
+
 }
 
 class RBNode {
@@ -121,7 +172,6 @@ class RBNode {
         return [false];
       }
     } else {
-      // debugger;
       return [];
     }
   }
@@ -136,9 +186,18 @@ class RBNode {
     }
   }
 
-
   getColor() {
     return this.isRed ? 'red' : 'black';
+  }
+
+  forEachBelow(cb) {
+    cb(this);
+    if (this.left !== null) {
+      this.left.forEachBelow(cb);
+    }
+    if (this.right !== null) {
+      this.right.forEachBelow(cb);
+    }
   }
 
   static has(obj, value) {
@@ -149,7 +208,7 @@ class RBNode {
       return true;
     }
     if (obj.left !== null) {
-      if(RBNode.has(obj.left, value)) { return true; }
+      if (RBNode.has(obj.left, value)) { return true; }
     }
     if (obj.right !== null) {
       if (RBNode.has(obj.right, value)) { return true; }

@@ -73,6 +73,7 @@ describe('Red-Black BinarySearchTree', function() {
     rbBinarySearchTree.addChild(2);
     rbBinarySearchTree.addChild(3);
     rbBinarySearchTree.depthFirstLog(func);
-    expect(array).to.eql([2, 5, 3]);
+    expect(array).to.eql([3, 2, 5]);
   });
+
 });

@@ -1,4 +1,4 @@
-/* 
+/*
  ********** NOTE: **********
  * Do not edit this code unless you see a bug!
  */
@@ -15,30 +15,30 @@ var LimitedArray = function(limit) {
   var limitedArray = {};
   var storage = [];
   // var size = 0; to track insert count TODO later
-  
 
-  // initalize 
-  for ( var i = 0; i < limit; i++) { 
-     // initalize a new linked list
+
+  // initalize
+  for ( var i = 0; i < limit; i++) {
+    // initalize a new linked list
     storage[i] = Bucket();
   }
 
   limitedArray.get = function(index, key) {
     checkLimit(index);
-    return storage[index].retrieve(key); 
-  }; 
+    return storage[index].retrieve(key);
+  };
   limitedArray.set = function(index, key, value) {
     checkLimit(index);
     // size++; // to track insert count TODO later
     storage[index].addToTail(key, value);
   };
   limitedArray.each = function(callback) {
-    for (var i = 0; i < storage.length; i++) { 
+    for (var i = 0; i < storage.length; i++) {
       // this
       callback(storage[i], i, storage);
     }
   };
-  limitedArray.remove = function(index, key, val) { 
+  limitedArray.remove = function(index, key, val) {
     // write this
     // size--;
     // go to the storage index and call delete pa
@@ -88,9 +88,9 @@ var BucketMethods = {
     }
     var prev = null;
     var current = this.head;
-    
+
     while (current !== null) {
-      if (current.value[0] === targetKey && 
+      if (current.value[0] === targetKey &&
         current.value[1] === targetVal) {
         if (current.value[2] > 1) {
           current.value--;
@@ -108,7 +108,7 @@ var BucketMethods = {
   },
   'retrieve': function(targetKey) {
     var current = this.head;
-    var lastMatchedKey = undefined; 
+    var lastMatchedKey = undefined;
     while (current !== null) {
       if (current.value[0] === targetKey) {
         lastMatchedKey = current.value[1]; // value
@@ -129,9 +129,9 @@ var BucketMethods = {
   },
   'addToTail': function(key, value) {
     var newNode = TupNode(key, value);
-    this.head === null ? this.head = newNode : 
+    this.head === null ? this.head = newNode :
       this.tail.next = newNode;
-    this.tail = newNode;  
+    this.tail = newNode;
   }
 };
 

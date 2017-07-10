@@ -8,7 +8,7 @@ var Graph = function() {
 // Add a node to the graph, passing in the node's value.
 Graph.prototype.addNode = function(value) {
   this.nodes.push({
-    'value': value, // value primitive 
+    'value': value, // value primitive
     'edges': [] // array of node objects
   });
 };
@@ -18,7 +18,7 @@ Graph.prototype.contains = function(value) {
   for (let node of this.nodes) {
     if (node.value === value) {
       return true;
-    } 
+    }
   }
   return false;
 };
@@ -49,7 +49,7 @@ Graph.prototype.addEdge = function(fromValue, toValue) {
 Graph.prototype.removeEdge = function(fromValue, toValue) {
   this.nodes.filter(obj => obj.value === fromValue || obj.value === toValue)
     .forEach(o => o.edges = o.edges
-    .filter(i => !i.value === fromValue && !i.value === toValue));
+      .filter(i => !i.value === fromValue && !i.value === toValue));
 };
 
 // Pass in a callback which will be executed on each node of the graph.
@@ -68,7 +68,7 @@ Graph.prototype.getEdges = function(value) {
  * removeEdge: linear
  * addEdge: linear
  * hasEdge: linear
- * removeNode: Quadratic 
+ * removeNode: Quadratic
  * contains: linear
  * addNode: constant
  */
